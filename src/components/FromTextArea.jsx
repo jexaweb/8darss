@@ -9,11 +9,6 @@ function FromTextArea({ label, name, type }) {
       </label>
       <br />
       <div className="relative">
-        {lefIcon && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-4 text-2xl text-white pointer-events-none">
-            {lefIcon}
-          </div>
-        )}
         <textarea
           className="w-full px-6   py-2 pr-10 rounded-xl border  border-gray-200 dark:border-gray-600 
                    bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100

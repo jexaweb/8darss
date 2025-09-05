@@ -1,89 +1,72 @@
 import { Form } from "react-router-dom";
 import FormInput from "../components/FormInput";
 import FromTextArea from "../components/FromTextArea";
-
+import { userCollection } from "../hooks/userCollection";
 import Select from "react-select";
-import { useEffect, useMemo, useState } from "react";
-import { useCollection } from "../hooks/useCollection";
+import { useEffect, useState } from "react";
 
 function CreateTask() {
   const { data } = userCollection("users");
   const [userOptions, setUserOptions] = useState([]);
-  const [attachedUsers, setAttachedUsers] = useState([]);
 
   useEffect(() => {
-    if (!data) return;
-    const users = data.map((user) => ({
-      value: user.uid,
-      label: user.displayName,
-      uid: user.uid,
-      PhotoURL: user.PhotoURL,
-    }));
-
-    setUserOptions(users);
+    const users = data?.map((user) => {
+      return {
+        value: user.displayName,
+        label: user.displayName,
+        photoURL: user.photoURL,
+        uid: user.uid,
+      };
+    });
+    setUserOptions(users || []);
   }, [data]);
 
-  // Tanlangan userlarning uid'larini JSON shaklida yuborish
-  const attachedUidsJson = useMemo(
-    () => JSON.stringify(attachedUsers.map((u) => u.uid)),
-    [attachedUsers]
-  );
+  console.log(userOptions);
 
   return (
-    <div className="max-w-2xl mx-auto mt-8 bg-white shadow-md rounded-lg p-8 border border-gray-200">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Create Task</h1>
+    <>
+      <div className="max-w-2xl mx-auto mt-8 bg-blue-950 shadow-md rounded-lg p-8 border border-gray-200">
+        <Form method="post">
+          <FormInput label="title" name="title" type="text" />
+          <FromTextArea label="Description:" />
+          <FormInput label="Due To" name="due-to" type="date" />
+          <Select
+            isMulti
+            name="Users"
+            options={userOptions}
+            className="basic-multi-select mt-6 mb-6"
+            classNamePrefix="select"
+            formatOptionLabel={(option) => (
+              <div className="flex items-center gap-3">
+                <div className="avatar">
+                  <div className="w-8 h-8 rounded-full border border-gray-200">
+                    <img
+                      src={
+                        option.photoURL ||
+                        `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          option.label || "User"
+                        )}&background=random`
+                      }
+                      alt={option.label}
+                    />
+                  </div>
+                </div>
+                <span className="text-gray-700">{option.label}</span>
+              </div>
+            )}
+          />
 
-      <Form method="post" className="space-y-6">
-        {/* Task Title */}
-        <FormInput label="Title:" name="title" type="text" />
-
-        {/* Task Description */}
-        <FromTextArea
-          label="Description"
-          name="description"
-          placeholder="Task haqida batafsil yozing..."
-        />
-
-        {/* Due Date */}
-        <FormInput label="Due to:" name="due-to" type="date" />
-
-        <Select
-          isMulti
-          options={userOptions}
-          value={attachedUsers}
-          onChange={(selected) => setAttachedUsers(selected || [])}
-          placeholder="Foydalanuvchilarni tanlang..."
-          className="text-sm basic-multi-select"
-          classNamePrefix="select"
-          getOptionLabel={(opt) => opt.uid}
-          formatOptionLabel={(opt) => opt.uid}
-          formatOptionLabel={(opt) => (
-            <div className="flex items-center gap-8">
-              {opt.photoURL ? (
-                <img
-                  src={opt.photoURL}
-                  alt={opt.displayName}
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold"></div>
-              )}
-              <span className="text-gray-700">{opt.label}</span>
-            </div>
-          )}
-        />
-        <input type="hidden" name="assignedUsers" value={attachedUidsJson} />
-
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 transition duration-200 text-white font-medium px-6 py-2 rounded-lg shadow-md"
-          >
-            Create Task
-          </button>
-        </div>
-      </Form>
-    </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-600 transition duration-200 text-white font-medium px-6 py-2 rounded-lg shadow-md"
+            >
+              Create Task
+            </button>
+          </div>
+        </Form>
+      </div>
+    </>
   );
 }
 
