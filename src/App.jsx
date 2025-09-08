@@ -42,7 +42,7 @@ function App() {
           element: <CreateTask />,
         },
         {
-          path: "/Task/:id",
+          path: "/task/:id",
           element: <Task />,
         },
       ],
