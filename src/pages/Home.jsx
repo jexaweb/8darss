@@ -10,7 +10,7 @@ function Home() {
   const { _logout, error, isPending } = useLogout();
   const { user } = useSelector((store) => store.user);
   const { data } = userCollection("users");
-  const { data: tasks } = userCollection("tasks");
+  const { data: tasks } = userCollection("tasks", "asc");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">

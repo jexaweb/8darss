@@ -9,6 +9,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { useLogin } from "../hooks/useLogin";
 import { useResetPassword } from "../hooks/useResetPassword";
 import { formError } from "../components/Errorld";
+import { useGoogle } from "../hooks/useGoogle";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -22,6 +23,11 @@ function Login() {
   const user = useActionData();
   const [error, setError] = useState(null);
   const { resetPassword } = useResetPassword();
+  const {
+    googleProvider,
+    isPending: isPendingGoogle,
+    error: errorGoogle,
+  } = useGoogle();
 
   const [forgetPassword, setForgetPassword] = useState(false);
 
@@ -135,6 +141,42 @@ function Login() {
                   Loading...
                 </button>
               )}
+
+              {!isPendingGoogle && (
+                <button
+                  onClick={googleProvider}
+                  type="button"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl 
+                         shadow-sm text-sm font-medium text-white 
+                        //  bg-gradient-to-r from-purple-600 to-blue-600 
+                        //  hover:from-purple-700 hover:to-blue-700 
+                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+                         transform hover:scale-105 transition duration-200 ease-in-out
+                         disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <img
+                    src="../public/google-g-2015-logo.png"
+                    alt=""
+                    className="w-8 h-6"
+                  />
+                  Continue with Google
+                </button>
+              )}
+
+              {isPendingGoogle && (
+                <button
+                  disabled
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl 
+                         shadow-sm text-sm font-medium text-white 
+                         bg-gradient-to-r from-purple-600 to-blue-600 
+                         hover:from-purple-700 hover:to-blue-700 
+                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+                         transform hover:scale-105 transition duration-200 ease-in-out
+                         disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Loading...
+                </button>
+              )}
             </Form>
           )}
           <div className="mb-7">
@@ -174,6 +216,9 @@ function Login() {
 
           <div>{error && <p style={{ color: "red" }}>{error}</p>}</div>
           <div>{_error && <p style={{ color: "red" }}>{_error}</p>}</div>
+          <div>
+            {errorGoogle && <p style={{ color: "red" }}>{errorGoogle}</p>}
+          </div>
         </div>
       </div>
     </div>

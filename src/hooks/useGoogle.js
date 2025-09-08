@@ -7,7 +7,7 @@ import { getFirebaseErrorMessage } from "../components/Errorld";
 import { db } from "../firebase/config";
 import { doc, setDoc } from "firebase/firestore";
 
-export const useGooglr = () => {
+export const useGoogle = () => {
   const dispatch = useDispatch();
 
   const [isPending, setIsPending] = useState(false);

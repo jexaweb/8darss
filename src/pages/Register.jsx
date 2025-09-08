@@ -12,10 +12,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { useRegister } from "../hooks/useRegister";
 import { useState } from "react";
 import { formError } from "../components/Errorld";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 import { useGoogle } from "../hooks/useGoogle";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -153,13 +150,18 @@ function Register() {
                 type="button"
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl 
                          shadow-sm text-sm font-medium text-white 
-                         bg-gradient-to-r from-purple-600 to-blue-600 
-                         hover:from-purple-700 hover:to-blue-700 
+                        //  bg-gradient-to-r from-purple-600 to-blue-600 
+                        //  hover:from-purple-700 hover:to-blue-700 
                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
                          transform hover:scale-105 transition duration-200 ease-in-out
                          disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Google
+                <img
+                  src="../public/google-g-2015-logo.png"
+                  alt=""
+                  className="w-8 h-6"
+                />
+                Continue with Google
               </button>
             )}
 

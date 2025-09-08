@@ -4,7 +4,7 @@ import FromTextArea from "../components/FromTextArea";
 import { userCollection } from "../hooks/userCollection";
 import Select from "react-select";
 import { useEffect, useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/config";
 
 function CreateTask() {
@@ -38,6 +38,7 @@ function CreateTask() {
       userOptions,
       dueTo,
       comments: [],
+      timestamp: serverTimestamp(),
     };
 
     await addDoc(collection(db, "tasks"), {
