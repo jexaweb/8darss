@@ -19,6 +19,7 @@ import { auth } from "./firebase/config";
 import { useEffect } from "react";
 import { isAuthReady, login } from "./app/features/userSlice";
 import CreateTask from "./pages/CreateTask";
+import Task from "./pages/task";
 
 function App() {
   const { user, authReady } = useSelector((store) => store.user);
@@ -39,6 +40,10 @@ function App() {
         {
           path: "/Createtask",
           element: <CreateTask />,
+        },
+        {
+          path: "/task/:id",
+          element: <Task />,
         },
       ],
     },

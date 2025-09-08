@@ -14,6 +14,8 @@ import { useState } from "react";
 import { formError } from "../components/Errorld";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { useGoogle } from "../hooks/useGoogle";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -26,6 +28,11 @@ function Register() {
   const user = useActionData();
   const [error, setError] = useState(null);
   const { register, isPending, error: _error } = useRegister();
+  const {
+    googleProvider,
+    isPending: isPendingGoogle,
+    error: errorGoogle,
+  } = useGoogle();
   useEffect(() => {
     if (user?.name && user?.email && user?.password) {
       register(user.name, user.email, user.password);
@@ -140,6 +147,36 @@ function Register() {
                 Loading...
               </button>
             )}
+            {!isPendingGoogle && (
+              <button
+                onClick={googleProvider}
+                type="button"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl 
+                         shadow-sm text-sm font-medium text-white 
+                         bg-gradient-to-r from-purple-600 to-blue-600 
+                         hover:from-purple-700 hover:to-blue-700 
+                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+                         transform hover:scale-105 transition duration-200 ease-in-out
+                         disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Google
+              </button>
+            )}
+
+            {isPendingGoogle && (
+              <button
+                disabled
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl 
+                         shadow-sm text-sm font-medium text-white 
+                         bg-gradient-to-r from-purple-600 to-blue-600 
+                         hover:from-purple-700 hover:to-blue-700 
+                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+                         transform hover:scale-105 transition duration-200 ease-in-out
+                         disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Loading...
+              </button>
+            )}
             <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
               If you have an account, please{" "}
               <Link
@@ -152,6 +189,9 @@ function Register() {
           </Form>
           <div>{error && <p style={{ color: "red" }}>{error}</p>}</div>
           <div>{_error && <p style={{ color: "red" }}>{_error}</p>}</div>
+          <div>
+            {errorGoogle && <p style={{ color: "red" }}>{errorGoogle}</p>}
+          </div>
         </div>
       </div>
     </div>

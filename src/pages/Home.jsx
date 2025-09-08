@@ -1,13 +1,16 @@
 import { useSelector } from "react-redux";
 import { useLogout } from "../hooks/useLogout";
-import { userCollection } from "../hooks/useCollection";
+import { userCollection } from "../hooks/userCollection";
 import { CiWifiOn } from "react-icons/ci";
 import { FaUserGroup } from "react-icons/fa6";
+import { use } from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   const { _logout, error, isPending } = useLogout();
   const { user } = useSelector((store) => store.user);
   const { data } = userCollection("users");
+  const { data: tasks } = userCollection("tasks");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
@@ -51,6 +54,19 @@ function Home() {
               >
                 <span>{isPending ? "Loading..." : "Logout"}</span>
               </button>
+              <Link
+                to="/Createtask"
+                className={`
+                  flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200
+                  ${
+                    isPending
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                  }
+                `}
+              >
+                <span>{isPending ? "Loading..." : "Createtask"}</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -122,6 +138,36 @@ function Home() {
             )}
           </div>
         </div>
+
+        <ul className="space-y-3 mt-30">
+          {tasks &&
+            tasks.map((task) => (
+              <li
+                key={task.uid}
+                className="flex items-center justify-between bg-gradient-to-b bg-white to-blue-500 p-4 rounded-lg shadow-sm border border-gray-100 hover:border-indigo-200 hover:shadow-md transition-all duration-200"
+              >
+                <Link
+                  to={`/task/${task.uid}`}
+                  className="flex items-center gap-3"
+                >
+                  {" "}
+                  <h5 className="text-gray-800 dark:text-gray-800 font-medium text-base">
+                    {task.title}
+                  </h5>
+                  <div className="flex -space-x-2">
+                    {task.userOptions.map((user) => (
+                      <img
+                        key={user.uid}
+                        src={user.photoURL}
+                        alt={user.displayName}
+                        className="w-8 h-8 rounded-full border border-gray-200 "
+                      />
+                    ))}
+                  </div>
+                </Link>
+              </li>
+            ))}
+        </ul>
       </div>
     </div>
   );

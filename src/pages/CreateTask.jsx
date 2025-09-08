@@ -1,11 +1,14 @@
-import { Form } from "react-router-dom";
+import { Form, Navigate, useNavigate } from "react-router-dom";
 import FormInput from "../components/FormInput";
 import FromTextArea from "../components/FromTextArea";
 import { userCollection } from "../hooks/userCollection";
 import Select from "react-select";
 import { useEffect, useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 function CreateTask() {
+  const navigate = useNavigate();
   const { data } = userCollection("users");
   const [userOptions, setUserOptions] = useState([]);
 
@@ -21,14 +24,39 @@ function CreateTask() {
     setUserOptions(users || []);
   }, [data]);
 
-  console.log(userOptions);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const dueTo = formData.get("due-to");
+
+    const task = {
+      title,
+      description,
+      userOptions,
+      dueTo,
+      comments: [],
+    };
+
+    await addDoc(collection(db, "tasks"), {
+      ...task,
+    }).then(() => {
+      alert("Mofaqiyatli qo'shildi !");
+      navigate("/");
+    });
+  };
 
   return (
     <>
-      <div className="max-w-2xl mx-auto mt-8 bg-blue-950 shadow-md rounded-lg p-8 border border-gray-200">
-        <Form method="post">
+      <div
+        className="max-w-2xl mx-auto bg-gradient-to-b from-blue-50 via-white to-purple-50 
+                    dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 shadow-md rounded-lg p-8 border border-gray-200  "
+      >
+        <form onSubmit={handleSubmit} method="post">
           <FormInput label="title" name="title" type="text" />
-          <FromTextArea label="Description:" />
+          <FromTextArea label="Description:" name="description" />
           <FormInput label="Due To" name="due-to" type="date" />
           <Select
             isMulti
@@ -64,7 +92,7 @@ function CreateTask() {
               Create Task
             </button>
           </div>
-        </Form>
+        </form>
       </div>
     </>
   );
