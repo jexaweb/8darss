@@ -19,7 +19,7 @@ import { auth } from "./firebase/config";
 import { useEffect } from "react";
 import { isAuthReady, login } from "./app/features/userSlice";
 import CreateTask from "./pages/CreateTask";
-import Task from "./pages/task";
+import Task from "./pages/Task";
 
 function App() {
   const { user, authReady } = useSelector((store) => store.user);
