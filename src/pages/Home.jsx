@@ -67,6 +67,19 @@ function Home() {
               >
                 <span>{isPending ? "Loading..." : "Createtask"}</span>
               </Link>
+              <Link
+                to="/profile"
+                className={`
+                  flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200
+                  ${
+                    isPending
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                  }
+                `}
+              >
+                <span>{isPending ? "Loading..." : "profile"}</span>
+              </Link>
             </div>
           </div>
         </div>

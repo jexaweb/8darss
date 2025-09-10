@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { isAuthReady, login } from "./app/features/userSlice";
 import CreateTask from "./pages/CreateTask";
 import Task from "./pages/Task";
+import Profile from "./pages/Profile";
 
 function App() {
   const { user, authReady } = useSelector((store) => store.user);
@@ -44,6 +45,10 @@ function App() {
         {
           path: "/task/:id",
           element: <Task />,
+        },
+        {
+          path: "/profile",
+          element: <Profile />,
         },
       ],
     },
